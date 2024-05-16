@@ -105,7 +105,7 @@ class AiModelCubit extends Cubit<AiModelState> {
     await _assistant.awaitSpeakCompletion(true);
     await _assistant.setLanguage("en-US");
 
-    await _assistant.setSpeechRate(0.6);
+    await _assistant.setSpeechRate(0.55);
 
     await _assistant.setVolume(1.0);
 

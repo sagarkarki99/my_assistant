@@ -34,69 +34,59 @@ class _GeminiViewState extends State<GeminiView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: <Widget>[
-          AppBar(
-            title: const Text('Gemini'),
-            actions: [
-              IconButton(
-                onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const VoiceChatView(),
-                  ),
-                ),
-                icon: const Icon(
-                  Icons.voice_chat,
-                ),
-              )
-            ],
-          ),
-          Expanded(
-            child: chats.isEmpty
-                ? const Center(
-                    child: Text('Lets chat with Gemini'),
-                  )
-                : ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: chats.length,
-                    itemBuilder: (context, index) {
-                      return chats[index];
-                    },
-                  ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: inputController,
-                    minLines: 1,
-                    decoration: const InputDecoration(
-                      hintText: 'Ask me anything, hehehe...',
-                      border: OutlineInputBorder(),
-                    ),
-                    keyboardType: TextInputType.text,
-                    onTapOutside: (e) {
-                      FocusScope.of(context).unfocus();
-                    },
-                    onEditingComplete: () {
-                      FocusScope.of(context).unfocus();
-                    },
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    FocusScope.of(context).unfocus();
-                    sendPrompt();
-                  },
-                  icon: const Icon(Icons.arrow_forward_ios_sharp),
-                )
-              ],
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
+          children: <Widget>[
+            AppBar(
+              title: const Text('Gemini chat'),
             ),
-          )
-        ],
+            Expanded(
+              child: chats.isEmpty
+                  ? const Center(
+                      child: Text('Lets chat with Gemini'),
+                    )
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: chats.length,
+                      itemBuilder: (context, index) {
+                        return chats[index];
+                      },
+                    ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: inputController,
+                      minLines: 1,
+                      decoration: const InputDecoration(
+                        hintText: 'Ask me anything, hehehe...',
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.text,
+                      onTapOutside: (e) {
+                        FocusScope.of(context).unfocus();
+                      },
+                      onEditingComplete: () {
+                        FocusScope.of(context).unfocus();
+                      },
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      FocusScope.of(context).unfocus();
+                      sendPrompt();
+                    },
+                    icon: const Icon(Icons.arrow_forward_ios_sharp),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

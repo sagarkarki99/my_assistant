@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_assistant/cubit/ai_model_cubit.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:animated_background/animated_background.dart';
+import 'package:my_assistant/gemini_view.dart';
 
 class VoiceChatView extends StatefulWidget {
   const VoiceChatView({super.key});
@@ -23,6 +24,21 @@ class _VoiceChatViewState extends State<VoiceChatView>
     final cubit = context.watch<AiModelCubit>();
     final voiceAssistant = cubit.speechToText;
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Gemini chat'),
+        actions: [
+          IconButton(
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const GeminiView(),
+              ),
+            ),
+            icon: const Icon(
+              Icons.voice_chat,
+            ),
+          )
+        ],
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
