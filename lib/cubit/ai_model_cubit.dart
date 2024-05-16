@@ -40,7 +40,7 @@ class AiModelCubit extends Cubit<AiModelState> {
     );
     final contents = [
       Content.text(
-          'Always answer me in less than 30 words and Do not give an answer in markdown format.')
+          'Act like an assistant and respond in a natural and conversational way.')
     ];
     final response = await _geminiModel.generateContent(contents);
     log('Model: ${response.text}');
@@ -105,7 +105,7 @@ class AiModelCubit extends Cubit<AiModelState> {
     await _assistant.awaitSpeakCompletion(true);
     await _assistant.setLanguage("en-US");
 
-    await _assistant.setSpeechRate(0.5);
+    await _assistant.setSpeechRate(0.6);
 
     await _assistant.setVolume(1.0);
 

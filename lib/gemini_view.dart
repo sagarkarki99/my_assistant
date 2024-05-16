@@ -1,5 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:markdown_widget/markdown_widget.dart';
 import 'package:markdown_widget/widget/all.dart';
 import 'package:my_assistant/cubit/ai_model_cubit.dart';
 import 'package:my_assistant/main.dart';
@@ -54,27 +58,43 @@ class _GeminiViewState extends State<GeminiView> {
                     child: Text('Lets chat with Gemini'),
                   )
                 : ListView.builder(
+                    shrinkWrap: true,
                     itemCount: chats.length,
                     itemBuilder: (context, index) {
                       return chats[index];
                     },
                   ),
           ),
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: inputController,
-                  decoration: const InputDecoration(
-                    hintText: 'Ask me anything, hehehe...',
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: inputController,
+                    minLines: 1,
+                    decoration: const InputDecoration(
+                      hintText: 'Ask me anything, hehehe...',
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.text,
+                    onTapOutside: (e) {
+                      FocusScope.of(context).unfocus();
+                    },
+                    onEditingComplete: () {
+                      FocusScope.of(context).unfocus();
+                    },
                   ),
                 ),
-              ),
-              IconButton(
-                onPressed: sendPrompt,
-                icon: const Icon(Icons.arrow_forward_ios_sharp),
-              )
-            ],
+                IconButton(
+                  onPressed: () {
+                    FocusScope.of(context).unfocus();
+                    sendPrompt();
+                  },
+                  icon: const Icon(Icons.arrow_forward_ios_sharp),
+                )
+              ],
+            ),
           )
         ],
       ),
@@ -85,12 +105,88 @@ class _GeminiViewState extends State<GeminiView> {
     final prompt = inputController.text.trim();
     inputController.text = '';
     setState(() {
-      chats.add(Text(prompt));
+      chats.add(PromptUI(value: prompt));
     });
     final content = [Content.text(prompt)];
-    final responses = await myModel.generateContent(content);
-    setState(() {
-      chats.add(Text(responses.text ?? 'Nothing'));
-    });
+    final responses = myModel.generateContentStream(content).listen(
+      (GenerateContentResponse data) {
+        log(data.text ?? 'Nothing');
+        setState(() {
+          if (chats.last is! ModelResponseUI) {
+            chats.add(ModelResponseUI(value: data.text ?? 'Nothing'));
+          } else {
+            final previousData = chats.removeLast() as ModelResponseUI;
+            final newValue = previousData.value + (data.text ?? '');
+            chats.add(ModelResponseUI(value: newValue));
+          }
+        });
+      },
+    );
+  }
+}
+
+class PromptUI extends StatelessWidget {
+  const PromptUI({super.key, required this.value});
+
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Container(
+          width: MediaQuery.of(context).size.width * 0.7,
+          padding: const EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+            color: Colors.blueGrey,
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          child: Text(value),
+        ),
+        const SizedBox(width: 8),
+        const CircleAvatar(
+          radius: 20,
+          backgroundColor: Colors.blueGrey,
+          child: Text('Y'),
+        ),
+      ],
+    );
+  }
+}
+
+class ModelResponseUI extends StatelessWidget {
+  final String value;
+  const ModelResponseUI({super.key, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const CircleAvatar(
+          radius: 20,
+          backgroundColor: Colors.blueGrey,
+          child: Text('M'),
+        ),
+        const SizedBox(width: 8),
+        Container(
+          padding: const EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+            color: Colors.blueGrey,
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.8,
+            child: MarkdownWidget(
+              data: value,
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
