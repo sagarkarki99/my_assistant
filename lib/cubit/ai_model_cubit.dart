@@ -112,6 +112,14 @@ class AiModelCubit extends Cubit<AiModelState> {
     await _assistant.setPitch(1.0);
 
     await _assistant.isLanguageAvailable("en-US");
+    await _assistant.setIosAudioCategory(
+        IosTextToSpeechAudioCategory.playback,
+        [
+          IosTextToSpeechAudioCategoryOptions.allowBluetooth,
+          IosTextToSpeechAudioCategoryOptions.allowBluetoothA2DP,
+          IosTextToSpeechAudioCategoryOptions.mixWithOthers
+        ],
+        IosTextToSpeechAudioMode.voicePrompt);
   }
 }
 

@@ -43,6 +43,10 @@
 	</array>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>For voice recognition, you need to allow this.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>To give a voice command, you need to allow this.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 </dict>
