@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_assistant/cubit/ai_model_cubit.dart';
+import 'package:my_assistant/cubit/chat_cubit.dart';
 import 'package:my_assistant/gemini_view.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_assistant/voice_chat_view.dart';
@@ -15,14 +15,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => AiModelCubit(),
+      create: (context) => ChatCubit(),
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: const VoiceChatView(),
+        home: const GeminiView(),
       ),
     );
   }

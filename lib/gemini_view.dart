@@ -5,9 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 import 'package:markdown_widget/widget/all.dart';
-import 'package:my_assistant/cubit/ai_model_cubit.dart';
-import 'package:my_assistant/main.dart';
-import 'package:my_assistant/voice_chat_view.dart';
+import 'package:my_assistant/cubit/chat_cubit.dart';
 
 class GeminiView extends StatefulWidget {
   const GeminiView({super.key});
@@ -20,7 +18,9 @@ class _GeminiViewState extends State<GeminiView> {
   late final TextEditingController inputController;
   late final GenerativeModel myModel;
   List<Widget> chats = [];
-  String displayText = '';
+
+  late final GlobalKey<AnimatedListState> _listKey;
+  late final ScrollController _scrollController;
 
   @override
   void initState() {
@@ -29,6 +29,8 @@ class _GeminiViewState extends State<GeminiView> {
       apiKey: geminiApiKey,
       model: 'gemini-pro',
     );
+    _listKey = GlobalKey<AnimatedListState>();
+    _scrollController = ScrollController();
     super.initState();
   }
 
@@ -42,17 +44,31 @@ class _GeminiViewState extends State<GeminiView> {
               title: const Text('Gemini chat'),
             ),
             Expanded(
-              child: chats.isEmpty
-                  ? const Center(
+              child: Stack(
+                children: [
+                  if (chats.isEmpty)
+                    const Center(
                       child: Text('Lets chat with Gemini'),
-                    )
-                  : ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: chats.length,
-                      itemBuilder: (context, index) {
-                        return chats[index];
-                      },
                     ),
+                  AnimatedList(
+                    key: _listKey,
+                    reverse: true,
+                    controller: _scrollController,
+                    initialItemCount: chats.length,
+                    shrinkWrap: true,
+                    itemBuilder: (ctx, index, animation) {
+                      return SlideTransition(
+                          position: animation.drive(
+                            Tween<Offset>(
+                              begin: const Offset(0, 1),
+                              end: const Offset(0, 0),
+                            ),
+                          ),
+                          child: chats[index]);
+                    },
+                  ),
+                ],
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -95,23 +111,44 @@ class _GeminiViewState extends State<GeminiView> {
     final prompt = inputController.text.trim();
     inputController.text = '';
     setState(() {
-      chats.add(PromptUI(value: prompt));
+      chats.insert(0, PromptUI(value: prompt));
+      _listKey.currentState!.insertItem(0);
+      setState(() {});
     });
     final content = [Content.text(prompt)];
-    final responses = myModel.generateContentStream(content).listen(
-      (GenerateContentResponse data) {
-        log(data.text ?? 'Nothing');
-        setState(() {
-          if (chats.last is! ModelResponseUI) {
-            chats.add(ModelResponseUI(value: data.text ?? 'Nothing'));
-          } else {
-            final previousData = chats.removeLast() as ModelResponseUI;
-            final newValue = previousData.value + (data.text ?? '');
-            chats.add(ModelResponseUI(value: newValue));
-          }
-        });
-      },
-    );
+    final response = await myModel.generateContent(content);
+    _listKey.currentState!.insertItem(0);
+    chats.insert(0, ModelResponseUI(value: response.text ?? 'Nothing'));
+    // _scrollController.animateTo(
+    //   _scrollController.position.maxScrollExtent,
+    //   duration: const Duration(milliseconds: 500),
+    //   curve: Curves.fastOutSlowIn,
+    // );
+    // myModel.generateContentStream(content).listen(
+    //   (GenerateContentResponse data) {
+    //     log(data.text ?? 'Nothing');
+    //     setState(() {
+    //       if (chats.first is! ModelResponseUI) {
+    //         _listKey.currentState!.insertItem(0);
+    //         chats.insert(0, ModelResponseUI(value: data.text ?? 'Nothing'));
+    //         _scrollController.animateTo(
+    //           _scrollController.position.maxScrollExtent,
+    //           duration: const Duration(seconds: 2),
+    //           curve: Curves.fastOutSlowIn,
+    //         );
+    //       } else {
+    //         final previousData = chats.removeLast() as ModelResponseUI;
+    //         final newValue = previousData.value + (data.text ?? '');
+    //         chats.insert(0, ModelResponseUI(value: newValue));
+    //         _scrollController.animateTo(
+    //           _scrollController.position.maxScrollExtent,
+    //           duration: const Duration(seconds: 2),
+    //           curve: Curves.fastOutSlowIn,
+    //         );
+    //       }
+    //     });
+    //   },
+    // );
   }
 }
 

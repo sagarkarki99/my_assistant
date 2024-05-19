@@ -1,4 +1,4 @@
-part of 'ai_model_cubit.dart';
+part of 'chat_cubit.dart';
 
 @freezed
 class AiModelState with _$AiModelState {

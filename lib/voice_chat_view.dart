@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_assistant/cubit/ai_model_cubit.dart';
+import 'package:my_assistant/cubit/chat_cubit.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:animated_background/animated_background.dart';
 import 'package:my_assistant/gemini_view.dart';
@@ -21,7 +21,7 @@ class _VoiceChatViewState extends State<VoiceChatView>
   String _lastWords = '';
   @override
   Widget build(BuildContext context) {
-    final cubit = context.watch<AiModelCubit>();
+    final cubit = context.watch<ChatCubit>();
     final voiceAssistant = cubit.speechToText;
     return Scaffold(
       appBar: AppBar(
@@ -44,7 +44,7 @@ class _VoiceChatViewState extends State<VoiceChatView>
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             InkWell(
-              onTap: () => context.read<AiModelCubit>().stopSpeaking(),
+              onTap: () => context.read<ChatCubit>().stopSpeaking(),
               child: const Icon(Icons.ac_unit_sharp, size: 100),
             ),
             cubit.state.maybeWhen(
@@ -87,7 +87,7 @@ class _VoiceChatViewState extends State<VoiceChatView>
                 });
                 voiceAssistant.stop();
                 await Future.delayed(const Duration(milliseconds: 500));
-                context.read<AiModelCubit>().generateAnswer(_lastWords);
+                context.read<ChatCubit>().generateAnswer(_lastWords);
               },
               child: AnimatedContainer(
                 height: _isListening ? 130 : 100,

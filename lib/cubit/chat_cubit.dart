@@ -1,24 +1,24 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
 import 'package:speech_to_text/speech_to_text.dart';
 
-part 'ai_model_state.dart';
-part 'ai_model_cubit.freezed.dart';
+part 'chat_state.dart';
+part 'chat_cubit.freezed.dart';
 
 typedef VoiceAssistant = FlutterTts;
 
-class AiModelCubit extends Cubit<AiModelState> {
+class ChatCubit extends Cubit<AiModelState> {
   late final GenerativeModel _geminiModel;
   late final SpeechToText _speechToText;
   late final VoiceAssistant _assistant;
 
-  AiModelCubit() : super(const AiModelState.initial()) {
+  ChatCubit() : super(const AiModelState.initial()) {
     _setupModel();
 
     _speechToText = SpeechToText();
