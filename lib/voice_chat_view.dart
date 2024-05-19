@@ -1,11 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:my_assistant/cubit/chat_cubit.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:animated_background/animated_background.dart';
 import 'package:my_assistant/gemini_view.dart';
 
 class VoiceChatView extends StatefulWidget {
@@ -49,10 +47,7 @@ class _VoiceChatViewState extends State<VoiceChatView>
             ),
             cubit.state.maybeWhen(
               generatingAnswer: (answer) =>
-                  LoadingAnimationWidget.staggeredDotsWave(
-                color: Colors.pinkAccent,
-                size: 200,
-              ),
+                  Lottie.asset('assets/lottie/ai.json'),
               thinking: (thinkingMessage) {
                 return LoadingAnimationWidget.horizontalRotatingDots(
                   color: Colors.blueAccent,

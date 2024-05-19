@@ -36,7 +36,7 @@ class ChatCubit extends Cubit<AiModelState> {
   void _setupModel() async {
     _geminiModel = GenerativeModel(
       apiKey: geminiApiKey,
-      model: 'gemini-pro',
+      model: 'gemini-1.5-flash-latest',
     );
     final contents = [
       Content.text(
