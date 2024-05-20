@@ -1,10 +1,13 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:my_assistant/gemini_view.dart';
+import 'package:my_assistant/models/chat_data.dart';
 
 import 'package:speech_to_text/speech_to_text.dart';
 
@@ -17,10 +20,14 @@ class ChatCubit extends Cubit<AiModelState> {
   late final GenerativeModel _geminiModel;
   late final SpeechToText _speechToText;
   late final VoiceAssistant _assistant;
+  late final GlobalKey<AnimatedListState> _chatListKey;
 
-  ChatCubit() : super(const AiModelState.initial()) {
+  ChatCubit()
+      : super(
+          AiModelState(chatListKey: GlobalKey<AnimatedListState>()),
+        ) {
     _setupModel();
-
+    _chatListKey = GlobalKey<AnimatedListState>();
     _speechToText = SpeechToText();
     _speechToText.initialize(
       onStatus: (status) {
@@ -42,52 +49,90 @@ class ChatCubit extends Cubit<AiModelState> {
       Content.text(
           'Act like an assistant and respond in a natural and conversational way.')
     ];
+
     final response = await _geminiModel.generateContent(contents);
     log('Model: ${response.text}');
   }
 
   SpeechToText get speechToText => _speechToText;
   VoiceAssistant get voiceAssistant => _assistant;
+  GlobalKey<AnimatedListState> get chatListKey => _chatListKey;
 
   Future<void> generateAnswer(String input) async {
     if (input.trim().isEmpty) return;
     log('Prompt: $input');
     final content = [Content.text(input)];
-    emit(const AiModelState.thinking());
-
+    emit(state.copyWith(status: const AiResponseStatus.thinking()));
     try {
       final response = await _geminiModel.generateContent(content);
       final outputText = response.text;
       log('Model: $outputText');
-      emit(AiModelState.generatingAnswer(outputText ?? 'Failed to generate'));
+      emit(
+        state.copyWith(
+          status: AiResponseStatus.generatingAnswer(
+            outputText ?? 'Failed to generate',
+          ),
+        ),
+      );
       final status = await voiceAssistant
           .speak(response.text ?? 'There is nothing to speak');
       print('status: $status');
     } on GenerativeAIException catch (e) {
-      emit(const AiModelState.generatingAnswer('I cannot answer that'));
+      emit(state.copyWith(
+          status:
+              const AiResponseStatus.generatingAnswer('I cannot answer that')));
     } finally {
       await _assistant.stop();
-      emit(const AiModelState.initial());
+      emit(state.copyWith(status: const AiResponseStatus.initial()));
     }
   }
 
-  void generateContinuousAnswer(String input) {
+  Future<void> generateContinuousAnswer(String input) async {
     final content = [Content.text(input)];
-    emit(const AiModelState.thinking());
+    final newHistory = _insertIntoChatList(
+      ChatData(role: 'user', message: input),
+    );
+    emit(
+      state.copyWith(
+        chats: newHistory,
+      ),
+    );
+    await Future.delayed(const Duration(milliseconds: 600));
+    emit(
+      state.copyWith(
+        status: const AiResponseStatus.thinking(),
+        chats: _insertIntoChatList(
+          ChatData(role: 'model'),
+        ),
+      ),
+    );
     _geminiModel
         .generateContentStream(content)
         .listen((GenerateContentResponse event) {
-      print(event.functionCalls);
-      for (var candidate in event.candidates) {
-        if (_hasModelStoppedAnswering(candidate)) {
-          emit(const AiModelState.initial());
-        }
-      }
-      print(event.text);
-      emit(AiModelState.generatingAnswer(
-        event.text ?? 'Failed to generate, hehe',
-      ));
+      final lastMessage = state.chats.first.message ?? '';
+      final newMessage = event.text ?? '';
+
+      emit(
+        state.copyWith(
+          chats: List.of(state.chats)
+            ..removeAt(0)
+            ..insert(
+                0,
+                ChatData(
+                  role: 'model',
+                  message: lastMessage + newMessage,
+                )),
+          status: AiResponseStatus.generatingAnswer(
+            event.text ?? 'Failed to generate',
+          ),
+        ),
+      );
     });
+  }
+
+  List<ChatData> _insertIntoChatList(ChatData chatData) {
+    state.chatListKey!.currentState!.insertItem(0);
+    return List.of(state.chats)..insert(0, chatData);
   }
 
   bool _hasModelStoppedAnswering(Candidate candidate) {
@@ -97,7 +142,7 @@ class ChatCubit extends Cubit<AiModelState> {
 
   Future<void> stopSpeaking() async {
     await _assistant.stop();
-    emit(const AiModelState.initial());
+    emit(state.copyWith(status: const AiResponseStatus.initial()));
   }
 
   Future<void> _setupVoiceAssistant() async {
@@ -124,3 +169,4 @@ class ChatCubit extends Cubit<AiModelState> {
 }
 
 const String geminiApiKey = 'AIzaSyByrLER-DHTtUXBctt4lb7sR-ZmuvzrMEM';
+const String geminiApiKeyBassam = 'AIzaSyDv685V2cH4fqwDQamlMn0KOfPvRQTdDq0';

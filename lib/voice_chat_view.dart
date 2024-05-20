@@ -45,7 +45,7 @@ class _VoiceChatViewState extends State<VoiceChatView>
               onTap: () => context.read<ChatCubit>().stopSpeaking(),
               child: const Icon(Icons.ac_unit_sharp, size: 100),
             ),
-            cubit.state.maybeWhen(
+            cubit.state.status.maybeWhen(
               generatingAnswer: (answer) =>
                   Lottie.asset('assets/lottie/ai.json'),
               thinking: (thinkingMessage) {

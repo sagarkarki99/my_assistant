@@ -16,6 +16,192 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$AiModelState {
+  GlobalKey<AnimatedListState>? get chatListKey =>
+      throw _privateConstructorUsedError;
+  List<ChatData> get chats => throw _privateConstructorUsedError;
+  AiResponseStatus get status => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $AiModelStateCopyWith<AiModelState> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $AiModelStateCopyWith<$Res> {
+  factory $AiModelStateCopyWith(
+          AiModelState value, $Res Function(AiModelState) then) =
+      _$AiModelStateCopyWithImpl<$Res, AiModelState>;
+  @useResult
+  $Res call(
+      {GlobalKey<AnimatedListState>? chatListKey,
+      List<ChatData> chats,
+      AiResponseStatus status});
+
+  $AiResponseStatusCopyWith<$Res> get status;
+}
+
+/// @nodoc
+class _$AiModelStateCopyWithImpl<$Res, $Val extends AiModelState>
+    implements $AiModelStateCopyWith<$Res> {
+  _$AiModelStateCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? chatListKey = freezed,
+    Object? chats = null,
+    Object? status = null,
+  }) {
+    return _then(_value.copyWith(
+      chatListKey: freezed == chatListKey
+          ? _value.chatListKey
+          : chatListKey // ignore: cast_nullable_to_non_nullable
+              as GlobalKey<AnimatedListState>?,
+      chats: null == chats
+          ? _value.chats
+          : chats // ignore: cast_nullable_to_non_nullable
+              as List<ChatData>,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as AiResponseStatus,
+    ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $AiResponseStatusCopyWith<$Res> get status {
+    return $AiResponseStatusCopyWith<$Res>(_value.status, (value) {
+      return _then(_value.copyWith(status: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$AiModelStateImplCopyWith<$Res>
+    implements $AiModelStateCopyWith<$Res> {
+  factory _$$AiModelStateImplCopyWith(
+          _$AiModelStateImpl value, $Res Function(_$AiModelStateImpl) then) =
+      __$$AiModelStateImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {GlobalKey<AnimatedListState>? chatListKey,
+      List<ChatData> chats,
+      AiResponseStatus status});
+
+  @override
+  $AiResponseStatusCopyWith<$Res> get status;
+}
+
+/// @nodoc
+class __$$AiModelStateImplCopyWithImpl<$Res>
+    extends _$AiModelStateCopyWithImpl<$Res, _$AiModelStateImpl>
+    implements _$$AiModelStateImplCopyWith<$Res> {
+  __$$AiModelStateImplCopyWithImpl(
+      _$AiModelStateImpl _value, $Res Function(_$AiModelStateImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? chatListKey = freezed,
+    Object? chats = null,
+    Object? status = null,
+  }) {
+    return _then(_$AiModelStateImpl(
+      chatListKey: freezed == chatListKey
+          ? _value.chatListKey
+          : chatListKey // ignore: cast_nullable_to_non_nullable
+              as GlobalKey<AnimatedListState>?,
+      chats: null == chats
+          ? _value._chats
+          : chats // ignore: cast_nullable_to_non_nullable
+              as List<ChatData>,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as AiResponseStatus,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$AiModelStateImpl implements _AiModelState {
+  const _$AiModelStateImpl(
+      {this.chatListKey,
+      final List<ChatData> chats = const [],
+      this.status = const AiResponseStatus.initial()})
+      : _chats = chats;
+
+  @override
+  final GlobalKey<AnimatedListState>? chatListKey;
+  final List<ChatData> _chats;
+  @override
+  @JsonKey()
+  List<ChatData> get chats {
+    if (_chats is EqualUnmodifiableListView) return _chats;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_chats);
+  }
+
+  @override
+  @JsonKey()
+  final AiResponseStatus status;
+
+  @override
+  String toString() {
+    return 'AiModelState(chatListKey: $chatListKey, chats: $chats, status: $status)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AiModelStateImpl &&
+            (identical(other.chatListKey, chatListKey) ||
+                other.chatListKey == chatListKey) &&
+            const DeepCollectionEquality().equals(other._chats, _chats) &&
+            (identical(other.status, status) || other.status == status));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, chatListKey,
+      const DeepCollectionEquality().hash(_chats), status);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$AiModelStateImplCopyWith<_$AiModelStateImpl> get copyWith =>
+      __$$AiModelStateImplCopyWithImpl<_$AiModelStateImpl>(this, _$identity);
+}
+
+abstract class _AiModelState implements AiModelState {
+  const factory _AiModelState(
+      {final GlobalKey<AnimatedListState>? chatListKey,
+      final List<ChatData> chats,
+      final AiResponseStatus status}) = _$AiModelStateImpl;
+
+  @override
+  GlobalKey<AnimatedListState>? get chatListKey;
+  @override
+  List<ChatData> get chats;
+  @override
+  AiResponseStatus get status;
+  @override
+  @JsonKey(ignore: true)
+  _$$AiModelStateImplCopyWith<_$AiModelStateImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$AiResponseStatus {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
@@ -63,16 +249,16 @@ mixin _$AiModelState {
 }
 
 /// @nodoc
-abstract class $AiModelStateCopyWith<$Res> {
-  factory $AiModelStateCopyWith(
-          AiModelState value, $Res Function(AiModelState) then) =
-      _$AiModelStateCopyWithImpl<$Res, AiModelState>;
+abstract class $AiResponseStatusCopyWith<$Res> {
+  factory $AiResponseStatusCopyWith(
+          AiResponseStatus value, $Res Function(AiResponseStatus) then) =
+      _$AiResponseStatusCopyWithImpl<$Res, AiResponseStatus>;
 }
 
 /// @nodoc
-class _$AiModelStateCopyWithImpl<$Res, $Val extends AiModelState>
-    implements $AiModelStateCopyWith<$Res> {
-  _$AiModelStateCopyWithImpl(this._value, this._then);
+class _$AiResponseStatusCopyWithImpl<$Res, $Val extends AiResponseStatus>
+    implements $AiResponseStatusCopyWith<$Res> {
+  _$AiResponseStatusCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -89,7 +275,7 @@ abstract class _$$InitialImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$InitialImplCopyWithImpl<$Res>
-    extends _$AiModelStateCopyWithImpl<$Res, _$InitialImpl>
+    extends _$AiResponseStatusCopyWithImpl<$Res, _$InitialImpl>
     implements _$$InitialImplCopyWith<$Res> {
   __$$InitialImplCopyWithImpl(
       _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
@@ -103,7 +289,7 @@ class _$InitialImpl implements _Initial {
 
   @override
   String toString() {
-    return 'AiModelState.initial()';
+    return 'AiResponseStatus.initial()';
   }
 
   @override
@@ -184,7 +370,7 @@ class _$InitialImpl implements _Initial {
   }
 }
 
-abstract class _Initial implements AiModelState {
+abstract class _Initial implements AiResponseStatus {
   const factory _Initial() = _$InitialImpl;
 }
 
@@ -199,7 +385,7 @@ abstract class _$$ThinkingImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$ThinkingImplCopyWithImpl<$Res>
-    extends _$AiModelStateCopyWithImpl<$Res, _$ThinkingImpl>
+    extends _$AiResponseStatusCopyWithImpl<$Res, _$ThinkingImpl>
     implements _$$ThinkingImplCopyWith<$Res> {
   __$$ThinkingImplCopyWithImpl(
       _$ThinkingImpl _value, $Res Function(_$ThinkingImpl) _then)
@@ -229,7 +415,7 @@ class _$ThinkingImpl implements Thinking {
 
   @override
   String toString() {
-    return 'AiModelState.thinking(thinkingMessage: $thinkingMessage)';
+    return 'AiResponseStatus.thinking(thinkingMessage: $thinkingMessage)';
   }
 
   @override
@@ -319,7 +505,7 @@ class _$ThinkingImpl implements Thinking {
   }
 }
 
-abstract class Thinking implements AiModelState {
+abstract class Thinking implements AiResponseStatus {
   const factory Thinking({final String? thinkingMessage}) = _$ThinkingImpl;
 
   String? get thinkingMessage;
@@ -339,7 +525,7 @@ abstract class _$$GeneratingAnswerImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$GeneratingAnswerImplCopyWithImpl<$Res>
-    extends _$AiModelStateCopyWithImpl<$Res, _$GeneratingAnswerImpl>
+    extends _$AiResponseStatusCopyWithImpl<$Res, _$GeneratingAnswerImpl>
     implements _$$GeneratingAnswerImplCopyWith<$Res> {
   __$$GeneratingAnswerImplCopyWithImpl(_$GeneratingAnswerImpl _value,
       $Res Function(_$GeneratingAnswerImpl) _then)
@@ -369,7 +555,7 @@ class _$GeneratingAnswerImpl implements GeneratingAnswer {
 
   @override
   String toString() {
-    return 'AiModelState.generatingAnswer(answer: $answer)';
+    return 'AiResponseStatus.generatingAnswer(answer: $answer)';
   }
 
   @override
@@ -459,7 +645,7 @@ class _$GeneratingAnswerImpl implements GeneratingAnswer {
   }
 }
 
-abstract class GeneratingAnswer implements AiModelState {
+abstract class GeneratingAnswer implements AiResponseStatus {
   const factory GeneratingAnswer(final String answer) = _$GeneratingAnswerImpl;
 
   String get answer;
