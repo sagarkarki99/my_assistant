@@ -3,9 +3,11 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class PromptUI extends StatelessWidget {
-  const PromptUI({super.key, required this.value, required this.width});
+  const PromptUI(
+      {super.key, required this.value, this.name, required this.width});
 
   final String value;
+  final String? name;
   final double width;
 
   @override
@@ -23,22 +25,23 @@ class PromptUI extends StatelessWidget {
           child: Text(value, style: Theme.of(context).textTheme.bodyMedium),
         ),
         const SizedBox(width: 8),
-        const CircleAvatar(
-          radius: 20,
-          backgroundColor: Colors.blueGrey,
-          child: Text('Y'),
-        ),
+        CircleAvatar(
+            radius: 20,
+            backgroundColor: Colors.blueGrey,
+            child: Text(name?.characters.firstOrNull ?? 'Y')),
       ],
     );
   }
 }
 
 class ModelResponseUI extends StatelessWidget {
+  final String? name;
   final String? value;
   final double width;
   const ModelResponseUI({
     super.key,
     this.value,
+    this.name,
     required this.width,
   });
 
@@ -48,10 +51,10 @@ class ModelResponseUI extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        const CircleAvatar(
+        CircleAvatar(
           radius: 20,
           backgroundColor: Colors.blueGrey,
-          child: Text('M'),
+          child: Text(name?.characters.firstOrNull ?? 'M'),
         ),
         const SizedBox(width: 8),
         value == null

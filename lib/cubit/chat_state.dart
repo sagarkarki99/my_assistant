@@ -3,6 +3,7 @@ part of 'chat_cubit.dart';
 @freezed
 class AiModelState with _$AiModelState {
   const factory AiModelState({
+    required String name,
     GlobalKey<AnimatedListState>? chatListKey,
     @Default([]) List<ChatData> chats,
     @Default(AiResponseStatus.initial()) AiResponseStatus status,

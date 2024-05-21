@@ -16,6 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$AiModelState {
+  String get name => throw _privateConstructorUsedError;
   GlobalKey<AnimatedListState>? get chatListKey =>
       throw _privateConstructorUsedError;
   List<ChatData> get chats => throw _privateConstructorUsedError;
@@ -33,7 +34,8 @@ abstract class $AiModelStateCopyWith<$Res> {
       _$AiModelStateCopyWithImpl<$Res, AiModelState>;
   @useResult
   $Res call(
-      {GlobalKey<AnimatedListState>? chatListKey,
+      {String name,
+      GlobalKey<AnimatedListState>? chatListKey,
       List<ChatData> chats,
       AiResponseStatus status});
 
@@ -53,11 +55,16 @@ class _$AiModelStateCopyWithImpl<$Res, $Val extends AiModelState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? name = null,
     Object? chatListKey = freezed,
     Object? chats = null,
     Object? status = null,
   }) {
     return _then(_value.copyWith(
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
       chatListKey: freezed == chatListKey
           ? _value.chatListKey
           : chatListKey // ignore: cast_nullable_to_non_nullable
@@ -91,7 +98,8 @@ abstract class _$$AiModelStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {GlobalKey<AnimatedListState>? chatListKey,
+      {String name,
+      GlobalKey<AnimatedListState>? chatListKey,
       List<ChatData> chats,
       AiResponseStatus status});
 
@@ -110,11 +118,16 @@ class __$$AiModelStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? name = null,
     Object? chatListKey = freezed,
     Object? chats = null,
     Object? status = null,
   }) {
     return _then(_$AiModelStateImpl(
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
       chatListKey: freezed == chatListKey
           ? _value.chatListKey
           : chatListKey // ignore: cast_nullable_to_non_nullable
@@ -135,11 +148,14 @@ class __$$AiModelStateImplCopyWithImpl<$Res>
 
 class _$AiModelStateImpl implements _AiModelState {
   const _$AiModelStateImpl(
-      {this.chatListKey,
+      {required this.name,
+      this.chatListKey,
       final List<ChatData> chats = const [],
       this.status = const AiResponseStatus.initial()})
       : _chats = chats;
 
+  @override
+  final String name;
   @override
   final GlobalKey<AnimatedListState>? chatListKey;
   final List<ChatData> _chats;
@@ -157,7 +173,7 @@ class _$AiModelStateImpl implements _AiModelState {
 
   @override
   String toString() {
-    return 'AiModelState(chatListKey: $chatListKey, chats: $chats, status: $status)';
+    return 'AiModelState(name: $name, chatListKey: $chatListKey, chats: $chats, status: $status)';
   }
 
   @override
@@ -165,6 +181,7 @@ class _$AiModelStateImpl implements _AiModelState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AiModelStateImpl &&
+            (identical(other.name, name) || other.name == name) &&
             (identical(other.chatListKey, chatListKey) ||
                 other.chatListKey == chatListKey) &&
             const DeepCollectionEquality().equals(other._chats, _chats) &&
@@ -172,7 +189,7 @@ class _$AiModelStateImpl implements _AiModelState {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, chatListKey,
+  int get hashCode => Object.hash(runtimeType, name, chatListKey,
       const DeepCollectionEquality().hash(_chats), status);
 
   @JsonKey(ignore: true)
@@ -184,10 +201,13 @@ class _$AiModelStateImpl implements _AiModelState {
 
 abstract class _AiModelState implements AiModelState {
   const factory _AiModelState(
-      {final GlobalKey<AnimatedListState>? chatListKey,
+      {required final String name,
+      final GlobalKey<AnimatedListState>? chatListKey,
       final List<ChatData> chats,
       final AiResponseStatus status}) = _$AiModelStateImpl;
 
+  @override
+  String get name;
   @override
   GlobalKey<AnimatedListState>? get chatListKey;
   @override

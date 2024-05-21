@@ -28,7 +28,8 @@ class _VoiceChatViewState extends State<VoiceChatView>
           IconButton(
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => const GeminiView(),
+                builder: (context) =>
+                    GeminiView(cubit: context.read<ChatCubit>()),
               ),
             ),
             icon: const Icon(
