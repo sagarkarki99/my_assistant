@@ -1,12 +1,7 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:google_generative_ai/google_generative_ai.dart';
-
 import 'package:my_assistant/cubit/chat_cubit.dart';
-import 'package:my_assistant/models/chat_data.dart';
 import 'package:my_assistant/widgets/chat_items.dart';
 
 class GeminiView extends StatefulWidget {
@@ -22,6 +17,7 @@ class _GeminiViewState extends State<GeminiView>
     with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return BlocProvider.value(
       value: widget.cubit,
       child: Builder(builder: (context) {
@@ -32,8 +28,6 @@ class _GeminiViewState extends State<GeminiView>
           ),
           body: Center(
             child: LayoutBuilder(builder: (context, constraints) {
-              final chatCubit = context.read<ChatCubit>();
-
               final maxWidth = constraints.maxWidth > 700
                   ? 700.toDouble()
                   : constraints.maxWidth;
