@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:my_assistant/cubit/chat_cubit.dart';
 import 'package:my_assistant/widgets/chat_items.dart';
 
