@@ -28,24 +28,24 @@ jobs:
         with:
           payload: |
             {
-                "blocks": [
-                    {
-                    "type": "rich_text",
+             "blocks": [
+              {
+                "type": "rich_text",
+                "elements": [
+                  {
+                    "type": "rich_text_section",
                     "elements": [
-                        {
-                        "type": "rich_text_section",
-                        "elements": [
-                            {
-                            "type": "text",
-                            "text": "This card is merged to master: "
-                            },
-                            {
-                            "type": "link",
-                            "url": "${{ steps.clickup_link_extractor.outputs.card_link }}",
-                            }
-                        ]
-                        }
+                      {
+                        "type": "text",
+                        "text": "This card is merged to master: "
+                      },
+                      {
+                        "type": "link",
+                        "url": "${{ steps.clickup_link_extractor.outputs.card_link }}"
+                      }
                     ]
-                    }
+                  }
                 ]
+              }
+             ]
             }
