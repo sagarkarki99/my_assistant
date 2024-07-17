@@ -1,0 +1,51 @@
+name: notify-pr-merge
+run-name: notify slack on PR merge to master
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  notify-slack:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
+    steps:
+      - name: Extract Clickup link
+        id: clickup_link_extractor
+        run: |
+          LINK_REGEX = "https://app.clickup.com/t/[^\s\)]+\)"
+          PR_BODY = ${{ github.event.pull_request.body }}
+          if [[ $PR_BODY =~ $LINK_REGEX ]]; then
+              CLICKUP_LINK=${BASH_REMATCH[0]}
+              echo "CLICKUP_LINK=$CLICKUP_LINK" >> $GITHUB_ENV
+          fi
+          echo "::set-output name=card_link::$CLICKUP_LINK"
+
+      - name: Notify Slack
+        uses: slackapi/slack-github-action@v1.26.0
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEB_HOOK_FOR_GITHUB_UPDATES }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        with:
+          payload: |
+            {
+                "blocks": [
+                    {
+                    "type": "rich_text",
+                    "elements": [
+                        {
+                        "type": "rich_text_section",
+                        "elements": [
+                            {
+                            "type": "text",
+                            "text": "This card is merged to master: "
+                            },
+                            {
+                            "type": "link",
+                            "url": "${{ steps.clickup_link_extractor.outputs.card_link }}",
+                            }
+                        ]
+                        }
+                    ]
+                    }
+                ]
+            }
