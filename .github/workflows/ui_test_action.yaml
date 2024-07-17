@@ -7,11 +7,11 @@ jobs:
     name: Setup Flutter
     runs-on: ubuntu-latest
     steps:
-      - name: Setup Flutter
-        uses: flutter-actions/setup-flutter@v3.6
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
         with:
-          channel: "stable"
-          version: "2.19.0"
+          channel: stable
+          flutter-version: 3.19.0
 
   flutte-test:
     name: Run Flutter test
