@@ -1,10 +1,10 @@
 name: ui-test-action
-run-name: Check test
+run-name: Pre checks
 on: [push]
 
 jobs:
-  setup-flutter:
-    name: Setup Flutter sdk and environment
+  analyze-and-test:
+    name: Checks flutter analyze and unit test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -14,13 +14,11 @@ jobs:
         with:
           channel: stable
           version: 3.0.2
+          cache: true # Enable caching for pub dependencies
+          cache-sdk: true # Enable caching for Flutter SDK
 
-  flutte-test:
-    name: Run Flutter test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out
-        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: flutter pub get
 
-      - name: Run test
+      - name: Run unit test
         run: flutter test
