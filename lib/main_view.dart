@@ -11,7 +11,7 @@ class MainView extends StatefulWidget {
 }
 
 class _MainViewState extends State<MainView> {
-  List<ChatCubit> chats = [];
+  List<ChatCubit> chats = <ChatCubit>[];
 
   @override
   void initState() {
