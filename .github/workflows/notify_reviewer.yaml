@@ -16,19 +16,60 @@ jobs:
         uses: slackapi/slack-github-action@v1.26.0
         with:
           # For posting a rich message using Block Kit
+          # {
+          #   "text": "New PR created: ${{ job.status }}\n${{ github.event.pull_request.title }} by ${{ github.event.pull_request.assignee.name }}",
+          #   "blocks": [
+          #     {
+          #       "type": "section",
+          #       "text": {
+          #         "type": "mrkdwn",
+          #         "text": ""
+          #       }
+          #     }
+          #   ]
+          # }
           payload: |
             {
-              "text": "New PR created: ${{ job.status }}\n${{ github.event.pull_request.title }} by ${{ github.event.sender.name }}",
               "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "${{ github.event.pull_request._links }}"
+                  {
+                      "type": "rich_text",
+                      "elements": [
+                          {
+                              "type": "rich_text_section",
+                              "elements": [
+                                  {
+                                      "type": "text",
+                                      "text": "hey ${{github.event.pull_request.requested_reviewers}}, You have a new PR to review: "
+                                  },
+                                  {
+                                      "type": "text",
+                                      "text": ${{github.event.pull_request.title}},
+                                      "style": {
+                                          "bold": true
+                                      }
+                                  },
+                                  {
+                                      "type": "text",
+                                      "text": "\nClickup Link:"
+                                  },
+                                  {
+                                      "type": "text",
+                                      "text": "hehe ${{ github.event.pull_request.url}} ",
+                                      "style": {
+                                          "bold": true
+                                      }
+                                  },
+                                  {
+                                      "type": "link",
+                                      "url": "${{ github.event.pull_request.url}} "
+                                  }
+                              ]
+                          }
+                      ]
                   }
-                }
               ]
             }
+
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEB_HOOK_FOR_GITHUB_UPDATES }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
