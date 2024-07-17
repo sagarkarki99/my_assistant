@@ -4,17 +4,16 @@ on: [push]
 
 jobs:
   setup-flutter:
-    name: Setup Flutter
+    name: Setup Flutter sdk and environment
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up Flutter
-        uses: subosito/flutter-action@48cafc24713cca54bbe03cdc3a423187d413aafa
+      - name: Setup Flutter SDK
+        uses: flutter-actions/setup-flutter@v3
         with:
           channel: stable
-          flutter-version: 3.22.0
-          cache: true
+          version: 3.0.2
 
   flutte-test:
     name: Run Flutter test
