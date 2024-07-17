@@ -1,5 +1,5 @@
 name: ui-test-action
-run-name: Check analyze and test
+run-name: Check test
 on: [push]
 
 jobs:
