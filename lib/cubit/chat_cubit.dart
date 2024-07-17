@@ -74,7 +74,7 @@ class ChatCubit extends Cubit<AiModelState> {
       );
       final status = await voiceAssistant
           .speak(response.text ?? 'There is nothing to speak');
-      // print('status: $status');
+      print('status: $status');
     } on GenerativeAIException catch (_) {
       emit(state.copyWith(
           status:
