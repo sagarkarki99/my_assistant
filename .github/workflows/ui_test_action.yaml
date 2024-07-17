@@ -13,12 +13,12 @@ jobs:
           channel: "stable"
           version: "2.19.0"
 
-  flutte-analyze:
-    name: Run Flutter analyze
+  flutte-test:
+    name: Run Flutter test
     runs-on: ubuntu-latest
     steps:
       - name: Check out
         uses: actions/checkout@v4
 
-      - name: Run Public flutter analyze
-        run: flutter analyze
+      - name: Run test
+        run: flutter test
