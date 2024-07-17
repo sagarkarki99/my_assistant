@@ -8,10 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Flutter
-        uses: subosito/flutter-action@v2
+        uses: subosito/flutter-action@48cafc24713cca54bbe03cdc3a423187d413aafa
         with:
           channel: stable
-          flutter-version: 3.19.0
+          flutter-version: 3.22.0
+          cache: true
 
   flutte-test:
     name: Run Flutter test
