@@ -15,7 +15,6 @@ jobs:
           channel: stable
           version: 3.22.0
           cache: true # Enable caching for pub dependencies
-          cache-sdk: true # Enable caching for Flutter SDK
 
       - name: Install dependencies
         run: flutter pub get
