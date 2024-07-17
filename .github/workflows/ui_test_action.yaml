@@ -7,6 +7,8 @@ jobs:
     name: Setup Flutter
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+
       - name: Set up Flutter
         uses: subosito/flutter-action@48cafc24713cca54bbe03cdc3a423187d413aafa
         with:
