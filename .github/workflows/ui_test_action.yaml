@@ -1,6 +1,6 @@
 name: ui-test-action
 run-name: Pre checks
-on: [push, pull_request]
+on: [push]
 
 jobs:
   analyze-and-test:
@@ -22,14 +22,3 @@ jobs:
 
       - name: Run unit test
         run: flutter test
-
-  notify-in-slack:
-    name: Notifies reviewer in slack
-    runs-on: ubuntu-latest
-    needs: analyze-and-test
-    steps:
-      - name: Extract PR information
-        run: |
-          echo "PR_NUMBER=${{ github.event.number }}" >> $GITHUB_ENV
-          echo "PR_TITLE=${{ github.event.pull_request.title }}" >> $GITHUB_ENV
-          echo "PR_TITLE=${{ github.event}}" >> $GITHUB_ENV

@@ -1,0 +1,34 @@
+name: Notify Reviewer
+run-name: notify reviewer in slack
+on: [pull_request]
+jobs:
+  notify-in-slack:
+    name: Notifies reviewer in slack
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract PR information
+        run: |
+          echo "PR_NUMBER=${{ github.event.number }}" >> $GITHUB_ENV
+          echo "PR_TITLE=${{ github.event.pull_request.title }}" >> $GITHUB_ENV
+          echo "PR_TITLE=${{ github.event}}" >> $GITHUB_ENV
+      - name: Send custom JSON data to Slack workflow
+        id: slack
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          # For posting a rich message using Block Kit
+          payload: |
+            {
+              "text": "New PR created: ${{ job.status }}\n${{ github.event.pull_request.title }} by ${{ github.event.sender.name }}",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "${{ github.event.pull_request._links }}"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEB_HOOK_FOR_GITHUB_UPDATES }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
